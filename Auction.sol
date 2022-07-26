@@ -3,13 +3,14 @@
 pragma solidity ^0.8.0;
 
 contract Auction{
-    
+
     address public holder;
     string public item;
     uint public Cost;
     address public potentialBuyer;
     bool public Trade;
 
+    
     modifier onlyHolder() {
         require(msg.sender == holder, "Auction: Only the owner of the item can stop the auction");
         _;
@@ -23,6 +24,7 @@ contract Auction{
 
     function makeRate (uint _rate) public {
         require(Trade == true, "Auction: Auction ended or not started");
+        require(msg.sender.balance >= _rate*10**18, "Auction: Not enough funds on the balance");
         require(_rate > Cost, "Auction: Your bid is less than the current one");
         Cost = _rate;
         potentialBuyer = msg.sender;
